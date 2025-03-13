@@ -3,7 +3,7 @@ name: Copy folder to other branch
 on:
   push:
     branches:
-      - main  # Dieser Workflow wird bei einem Push auf den main Branch ausgelöst
+      - main
 
 jobs:
   copy:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4  # Neueste Version von actions/checkout
+      - uses: actions/checkout@v4
 
       - name: Set up Git
         run: |
@@ -23,12 +23,12 @@ jobs:
           SRC_FOLDER_PATH: './docs/dist'
           TARGET_BRANCH: 'gh-pages'
         run: |
-          files=$(find $SRC_FOLDER_PATH -type f)  # Holt die Liste der Dateien
-          git fetch                          # Holt alle Branches
-          git checkout $TARGET_BRANCH        # Wechselt zum Ziel-Branch (gh-pages)
-          git checkout ${GITHUB_REF##*/} -- $files  # Kopiert die Dateien aus dem Quellordner in den Zielbranch
+          files=$(find $SRC_FOLDER_PATH -type f)
+          git fetch                   
+          git checkout $TARGET_BRANCH        
+          git checkout ${GITHUB_REF##*/} -- $files
           git add -A
-          git diff-index --quiet HEAD || git commit -am "Deploy updated docs to gh-pages"  # Commit, wenn Änderungen vorhanden sind
+          git diff-index --quiet HEAD || git commit -am "Deploy updated docs to gh-pages"
 
       - name: Push to gh-pages branch
         env:

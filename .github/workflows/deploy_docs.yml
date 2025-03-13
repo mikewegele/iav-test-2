@@ -1,0 +1,38 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Switch to gh-pages branch
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+
+      - name: Remove old JS files from assets
+        run: rm -rf assets/*.js
+
+      - name: Copy new content from docs/dist
+        run: |
+          git checkout main -- docs/dist
+          rsync -a --delete docs/dist/ .
+
+      - name: Commit and push changes
+        run: |
+          git add .
+          git commit -m "Deploy updated docs from main"
+          git push origin gh-pages

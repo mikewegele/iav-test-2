@@ -38,35 +38,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm run release
-
-  deploy-docs:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Checkout gh-pages branch
-        run: |
-          git fetch origin gh-pages:gh-pages
-          git checkout gh-pages
-
-      - name: Remove old JS files from assets
-        run: |
-          rm -f assets/*.js
-
-      - name: Copy new docs to root
-        run: |
-          rm -rf *
-          cp -r ./docs/dist/* .
-
-      - name: Commit and push changes
-        run: |
-          git add .
-          git commit -m 'Deploy new documentation'
-          git push origin gh-pages

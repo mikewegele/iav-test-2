@@ -1,33 +1,32 @@
-name: Deploy to GitHub Pages
+name: Copy folder to other branch
 
 on:
   push:
     branches:
-      - main
+      - main  # Dieser Workflow wird bei einem Push auf den main Branch ausgelöst
 
 jobs:
-  deploy:
+  copy:
+    name: Copy files to gh-pages
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4  # Neueste Version von actions/checkout
 
-      - name: Fetch and switch to gh-pages branch
+      - name: Set up Git
         run: |
-          git fetch origin gh-pages
-          git checkout gh-pages
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
 
-      - name: Remove index.html and assets/*
+      - name: Fetch gh-pages branch and copy files
+        env:
+          SRC_FOLDER_PATH: './dist/docs'
+          TARGET_BRANCH: 'gh-pages'
         run: |
-          rm -f index.html 
-          rm -rf assets/* 
-
-      - name: Copy contents of docs/dist to root
-        run: ls
-
-      - name: Commit and push changes
-        run: |
-          git add .
-          git commit -m "Deploy updated docs from main"
-          git push origin gh-pages
+          files=$(find $SRC_FOLDER_PATH -type f)  # Holt die Liste der Dateien
+          git fetch                          # Holt alle Branches
+          git checkout $TARGET_BRANCH        # Wechselt zum Ziel-Branch (gh-pages)
+          git checkout ${GITHUB_REF##*/} -- $files  # Kopiert die Dateien aus dem Quellordner in den Zielbranch
+          git add -A
+          git diff-index --quiet HEAD || git commit -am "Deploy updated docs to gh-pages"  # Commit, wenn Änderungen vorhanden sind
+          git push origin $TARGET_BRANCH     # Push auf den Ziel-Branch

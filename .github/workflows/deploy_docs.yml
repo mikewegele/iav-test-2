@@ -24,7 +24,7 @@ jobs:
           rm -rf assets/* 
 
       - name: Copy contents of docs/dist to root
-        run: cp -r ../docs/dist/* .
+        run: cp -r ./docs/dist/* .
 
       - name: Commit and push changes
         run: |

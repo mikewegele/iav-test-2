@@ -13,6 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Git
+        run: |
+          git config --global user.name 'mikewegele'
+          git config --global user.email 'mike.wegele@icloud.com'
+
       - name: Fetch gh-pages branch and copy files
         env:
           SRC_FOLDER_PATH: './docs/dist'

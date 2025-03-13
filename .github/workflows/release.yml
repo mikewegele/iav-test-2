@@ -63,7 +63,7 @@ jobs:
       - name: Copy new docs to root
         run: |
           rm -rf *
-          cp -r ../docs/dist/* .
+          cp -r ./docs/dist/* .
 
       - name: Commit and push changes
         run: |

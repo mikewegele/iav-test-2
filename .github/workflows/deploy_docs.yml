@@ -13,18 +13,18 @@ jobs:
       - name: Checkout main branch
         uses: actions/checkout@v4
 
-      - name: Switch to gh-pages branch
+      - name: Fetch and switch to gh-pages branch
         run: |
           git fetch origin gh-pages
           git checkout gh-pages
 
-      - name: Remove old JS files from assets
-        run: rm -rf assets/*.js
-
-      - name: Copy new content from docs/dist
+      - name: Remove index.html and assets/*
         run: |
-          git checkout main -- docs/dist
-          rsync -a --delete docs/dist/ .
+          rm -f index.html 
+          rm -rf assets/* 
+
+      - name: Copy contents of docs/dist to root
+        run: cp -r ../docs/dist/* .
 
       - name: Commit and push changes
         run: |

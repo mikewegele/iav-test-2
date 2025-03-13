@@ -20,7 +20,7 @@ jobs:
 
       - name: Fetch gh-pages branch and copy files
         env:
-          SRC_FOLDER_PATH: './dist/docs'
+          SRC_FOLDER_PATH: './docs/dist'
           TARGET_BRANCH: 'gh-pages'
         run: |
           ls

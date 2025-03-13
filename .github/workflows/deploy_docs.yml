@@ -13,11 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Git
-        run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-
       - name: Fetch gh-pages branch and copy files
         env:
           SRC_FOLDER_PATH: './docs/dist'
@@ -34,5 +29,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} gh-pages
           git push origin gh-pages 

@@ -17,7 +17,7 @@
 import React, {PropsWithChildren} from "react";
 import {Link, useLocation} from "react-router-dom";
 import makeStyles from "../../../util/makeStyles.tsx";
-import {GREY2} from "@iavofficial/frontend-framework/constants";
+import {GREY3} from "@iavofficial/frontend-framework/constants";
 
 const useStyles = makeStyles(() => ({
     link: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
         },
     },
     activeLink: {
-        backgroundColor: GREY2,
+        backgroundColor: GREY3,
     },
 }));
 
@@ -50,7 +50,7 @@ const NavLinkItem: React.FC<PropsWithChildren<Props>> = (props) => {
     const location = useLocation();
 
     const isActive = location.pathname.includes(to);
-    
+
     return (
         <li>
             <Link

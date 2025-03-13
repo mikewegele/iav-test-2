@@ -23,11 +23,16 @@ jobs:
           SRC_FOLDER_PATH: './docs/dist'
           TARGET_BRANCH: 'gh-pages'
         run: |
-          ls
           files=$(find $SRC_FOLDER_PATH -type f)  # Holt die Liste der Dateien
           git fetch                          # Holt alle Branches
           git checkout $TARGET_BRANCH        # Wechselt zum Ziel-Branch (gh-pages)
           git checkout ${GITHUB_REF##*/} -- $files  # Kopiert die Dateien aus dem Quellordner in den Zielbranch
           git add -A
           git diff-index --quiet HEAD || git commit -am "Deploy updated docs to gh-pages"  # Commit, wenn Änderungen vorhanden sind
-          git push origin $TARGET_BRANCH     # Push auf den Ziel-Branch
+
+      - name: Push to gh-pages branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
+          git push origin gh-pages  # Push auf den Ziel-Branch
